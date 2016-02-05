@@ -1,0 +1,34 @@
+<div ng-show="authenticated">
+
+    <div ng-controller="view" style="margin:auto">
+        <button type="button" ng-click="generate()">Generate Data To DB</button>
+
+        <div>
+            <div ui-grid="grids['transfer'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <pagination
+                    ng-model="grids['transfer'].currentPage"
+                    total-items="grids['transfer'].totalItems"
+                    max-size="grids['transfer'].maxSize"
+                    boundary-links="true">
+            </pagination>
+        </div>
+        <div>
+            <div ui-grid="grids['deposit'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <pagination
+                    ng-model="grids['deposit'].currentPage"
+                    total-items="grids['deposit'].totalItems"
+                    max-size="grids['deposit'].maxSize"
+                    boundary-links="true">
+            </pagination>
+        </div>
+        <div>
+            <div ui-grid="grids['withdrawal'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <pagination
+                    ng-model="grids['withdrawal'].currentPage"
+                    total-items="grids['withdrawal'].totalItems"
+                    max-size="grids['withdrawal'].maxSize"
+                    boundary-links="true">
+            </pagination>
+        </div>
+    </div>
+</div>
