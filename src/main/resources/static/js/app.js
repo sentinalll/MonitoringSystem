@@ -16,7 +16,7 @@ app.config(function ($routeProvider, $httpProvider) {
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 });
 app.controller('view', function ($scope, $interval, $http, uiGridConstants, $rootScope, $location) {
-
+    $scope.updateInterval = 1;
     $scope.grids = {}
     $scope.grids["deposit"] = {
         currentPage: 1,
@@ -66,13 +66,13 @@ app.controller('view', function ($scope, $interval, $http, uiGridConstants, $roo
 
 
     $scope.loadData = function (begin, end, type) {
-        $http.get('/monitoring/api/resource/totalItems/' + type).success(function (data) {
+        $http.get('api/v1.0/resource/totalItems/' + type).success(function (data) {
             $scope.grids[type].totalItems = data;
         }).error(function (data) {
             $rootScope.authenticated = false;
             $location.path("/login");
         });
-        $http.get('/monitoring/api/resource/' + begin + '/' + end + '/' + type).success(function (data) {
+        $http.get('api/v1.0/resource/' + begin + '/' + end + '/' + type).success(function (data) {
             $scope.grids[type].gridOptions.data = data;
         }).error(function (data) {
             $rootScope.authenticated = false;
@@ -84,7 +84,7 @@ app.controller('view', function ($scope, $interval, $http, uiGridConstants, $roo
         $scope.loadData($scope.grids["deposit"].currentPage - 1, $scope.numPerPage, "deposit");
         $scope.loadData($scope.grids["transfer"].currentPage - 1, $scope.numPerPage, "transfer");
         $scope.loadData($scope.grids["withdrawal"].currentPage - 1, $scope.numPerPage, "withdrawal");
-    }, 60 * 1000);
+    }, $scope.updateInterval * 60 * 1000);
 
     $scope.$watch('grids[\'deposit\'].currentPage + numPerPage', function () {
         $scope.loadData($scope.grids["deposit"].currentPage - 1, $scope.numPerPage, "deposit");

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Document
-public class DocEntity {
+public class LogEntity {
     @Id
     private String id;
 
@@ -16,7 +16,7 @@ public class DocEntity {
     private String operationType;
     private Date creationTime;
 
-    public DocEntity() {
+    public LogEntity() {
     }
 
     public String getId() {

@@ -1,10 +1,19 @@
 <div ng-show="authenticated">
 
     <div ng-controller="view" style="margin:auto">
-        <button type="button" ng-click="generate()">Generate Data To DB</button>
+        <div><label for="intrv">Update interval(in minutes)</label><input
+                id="intrv" type="number" style="width:80px"
+                ng-model="updateInterval"
+                min="0">
+        </div>
+        <div>
+            <button type="button" ng-click="generate()">Generate Data To DB</button>
+        </div>
 
         <div>
-            <div ui-grid="grids['transfer'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <label for="transfer">Transfer</label>
+
+            <div id="transfer" ui-grid="grids['transfer'].gridOptions" ui-grid-resize-columns class="grid"></div>
             <pagination
                     ng-model="grids['transfer'].currentPage"
                     total-items="grids['transfer'].totalItems"
@@ -13,7 +22,9 @@
             </pagination>
         </div>
         <div>
-            <div ui-grid="grids['deposit'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <label for="deposit">Deposit</label>
+
+            <div id="deposit" ui-grid="grids['deposit'].gridOptions" ui-grid-resize-columns class="grid"></div>
             <pagination
                     ng-model="grids['deposit'].currentPage"
                     total-items="grids['deposit'].totalItems"
@@ -22,7 +33,9 @@
             </pagination>
         </div>
         <div>
-            <div ui-grid="grids['withdrawal'].gridOptions" ui-grid-resize-columns class="grid"></div>
+            <label for="withdrawal">Withdrawal</label>
+
+            <div id="withdrawal" ui-grid="grids['withdrawal'].gridOptions" ui-grid-resize-columns class="grid"></div>
             <pagination
                     ng-model="grids['withdrawal'].currentPage"
                     total-items="grids['withdrawal'].totalItems"

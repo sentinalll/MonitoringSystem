@@ -1,54 +1,54 @@
 package com.playtech.service;
 
-import com.playtech.entity.DocEntity;
-import com.playtech.repository.DocEntityRepository;
+import com.playtech.dtos.LogDTO;
+import com.playtech.repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.playtech.utils.Utils.*;
+
 @Service
 public class MongoDBEntityServiceImpl implements EntityService {
-    private final DocEntityRepository repository;
+    private final LogRepository repository;
 
     @Autowired
-    MongoDBEntityServiceImpl(DocEntityRepository repository) {
+    MongoDBEntityServiceImpl(LogRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public List<DocEntity> findAll() {
-        return repository.findAll();
+    public List<LogDTO> findAll() {
+        return toDtos(repository.findAll());
     }
 
     @Override
-    public List<DocEntity> findPaging(int pageNumber, int PAGE_SIZE) {
-        return repository.findAll(new PageRequest(pageNumber, PAGE_SIZE)).getContent();
+    public List<LogDTO> findPaging(int pageNumber, int PAGE_SIZE) {
+        return toDtos(repository.findAll(new PageRequest(pageNumber, PAGE_SIZE)).getContent());
     }
 
     @Override
-    public List<DocEntity> findByCreationTimeGreaterThanOperationType(Date date, String type, int pageNumber, int PAGE_SIZE) {
-        return repository.findByCreationTimeGreaterThanAndOperationType(date, type, new PageRequest(pageNumber, PAGE_SIZE));
+    public List<LogDTO> findByCreationTimeGreaterThanOperationType(Date date, String type, int pageNumber, int PAGE_SIZE) {
+        return toDtos(repository.findByCreationTimeGreaterThanAndOperationType(date, type, new PageRequest(pageNumber, PAGE_SIZE)));
 
     }
 
     @Override
     public Long countByCreationTimeGreaterThanOperationType(Date date, String type) {
-        return repository.countByCreationTimeGreaterThanAndOperationType(date,type);
+        return repository.countByCreationTimeGreaterThanAndOperationType(date, type);
     }
 
     @Override
-    public void insert(DocEntity obj) {
-        repository.insert(obj);
+    public void insert(LogDTO obj) {
+        repository.insert(toEntity(obj));
     }
 
     @Override
-    public void insert(List<DocEntity> list) {
-        repository.insert(list);
+    public void insert(List<LogDTO> list) {
+        repository.insert(toEntities(list));
     }
 
 
