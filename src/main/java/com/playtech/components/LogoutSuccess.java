@@ -20,6 +20,7 @@ public class LogoutSuccess implements LogoutSuccessHandler {
                 httpServletRequest.getSession().invalidate();
                } catch (Exception e) {
                 e.printStackTrace();
+                e = null;
             }
         }
 
