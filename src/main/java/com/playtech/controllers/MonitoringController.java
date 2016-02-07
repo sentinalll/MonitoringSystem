@@ -1,8 +1,9 @@
 package com.playtech.controllers;
 
 import com.playtech.dtos.LogDTO;
-import com.playtech.entity.LogEntity;
 import com.playtech.service.EntityService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1.0")
 public class MonitoringController {
 
+    private static final Logger logger = LoggerFactory.getLogger(MonitoringController.class);
     private final EntityService service;
 
     @Autowired
@@ -29,7 +33,9 @@ public class MonitoringController {
     public Long totalItems(@PathVariable("type") String type) {
         LocalDateTime today = LocalDateTime.now();
         Date out = Date.from(today.minusHours(1).atZone(ZoneId.systemDefault()).toInstant());
-        return service.countByCreationTimeGreaterThanOperationType(out, type);
+        Long result = service.countByCreationTimeGreaterThanOperationType(out, type);
+        logger.debug("Total " + result + " records in DB created from " + out + " for OPERATION_TYPE:" + type);
+        return result;
     }
 
     @RequestMapping("/resource/{pageNumber}/{pageSize}/{type}")

@@ -15,7 +15,7 @@ app.config(function ($routeProvider, $httpProvider) {
 
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 });
-app.controller('view', function ($scope, $interval, $http, uiGridConstants, $rootScope, $location) {
+app.controller('view', function ($scope, $interval,$document, $http, $timeout, uiGridConstants, $rootScope, $location) {
     $scope.updateInterval = 1;
     $scope.grids = {}
     $scope.grids["deposit"] = {
@@ -24,9 +24,39 @@ app.controller('view', function ($scope, $interval, $http, uiGridConstants, $roo
         maxSize: 15,
         begin: 0,
         end: 0,
-        gridOptions: {}
+        gridOptions: {
+            enableColumnResizing: true,
+            onRegisterApi: function (gridApi) {
+                // dirty hack for column auto resizing (double click to all resizers)
+                $timeout(function (gridApi) {
+                    var resizers = document.getElementsByClassName('ui-grid-column-resizer');
+                    for (var i = 0; i < (resizers.length - 2); i++) {
+                        var event = new MouseEvent('dblclick', {
+                            'view': window,
+                            'bubbles': true,
+                            'cancelable': true
+                        });
+                        resizers[i].dispatchEvent(event);
+                    }
+                }, 500, true, gridApi);
+
+                // dirty hack for column auto resizing (resize last column if horizontal scroll present)
+                $timeout(function (gridApi) {
+                    var scrollWidth = document.getElementsByClassName('ui-grid-viewport')[0].scrollWidth;
+                    if (scrollWidth > 850) {
+                        var resizers = document.getElementsByClassName('ui-grid-column-resizer');
+                        var event = new MouseEvent('dblclick', {
+                            'view': window,
+                            'bubbles': true,
+                            'cancelable': true
+                        });
+                        resizers[resizers.length - 2].dispatchEvent(event);
+                    }
+                }, 500, true, gridApi);
+            }
+        }
     }
-    $scope.grids["deposit"].gridOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.WHEN_NEEDED;
+    //$scope.grids["deposit"].gridOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.WHEN_NEEDED;
     $scope.grids["deposit"].gridOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.WHEN_NEEDED;
     $scope.grids["deposit"].gridOptions.enableColumnResizing = true;
 
